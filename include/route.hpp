@@ -11,6 +11,7 @@ class Route {
     public:
         Route() = default;
         size_t size() const {return _col.size();}
+        
         const Coordinates & add(const Coordinates & a) {
             _col.push_back(a);
             return a;

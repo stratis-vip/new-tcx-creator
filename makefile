@@ -70,6 +70,12 @@ $(OBJS_DIR)/coordinates.o: src/coordinates.cpp include/coordinates.hpp
 	@$(CC) $(CFLAGS) -c src/coordinates.cpp -o $@ $(INC)
 	@echo " ...finished\n"
 
+$(OBJS_DIR)/bignums.o: src/bignums.cpp include/bignums.hpp 
+	$(DIR_GUARD)
+	@echo -n compiling $@ 
+	@$(CC) $(CFLAGS) -c src/bignums.cpp -o $@ $(INC)
+	@echo " ...finished\n"
+
 	
 #LIBS
 
@@ -79,7 +85,7 @@ $(OBJS_DIR)/libgmock.a: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o
 	@ar -rc $@ $^
 	@echo " ...finished\n"
 	
-libs:$(OBJS_DIR)/libgmock.a
+libs:$(OBJS_DIR)/libgmock.a ${OBJS_DIR}/bignums.o
 
 # TESTS	
 
@@ -89,7 +95,13 @@ $(TESTS_DIR)/gen: objs/gmock.o objs/gtest.o objs/route.o tests/gen.cpp
 	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ ${OBJS_DIR}/libgmock.a -o $@  
 	@echo " ...finished\n"
 
-tests: $(TESTS_DIR)/gen
+$(TESTS_DIR)/gpn: ${OBJS_DIR}/libgmock.a ${OBJS_DIR}/gmock.o ${OBJS_DIR}/gtest.o  ${OBJS_DIR}/bignums.o  tests/gpn.cpp
+	$(DIR_GUARD)
+	@echo -n compiling test $@ 
+	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ ${OBJS_DIR}/libgmock.a -o $@  
+	@echo " ...finished\n"
+
+tests: $(TESTS_DIR)/gen  $(TESTS_DIR)/gpn
 
 clean:
 	@rm -rf objs build

@@ -6,7 +6,7 @@ using namespace testing;
 class TestCoordinates : public Test
 {
 public:
-  Coordinates cor{1, 2, 3};
+  Coordinates cor{2, 1, 3};
 };
 
 TEST_F(TestCoordinates, CheckInitValues)
@@ -43,7 +43,7 @@ public:
     route.add(aCord);
   }
 private:
-  Coordinates aCord{2, 3, 4};
+  Coordinates aCord{3, 2, 4};
 };
 
 TEST_F(TestRoute, CheckInitValues)
