@@ -1,10 +1,9 @@
 #include <iostream>
-#include "routes.hpp"
+#include "route.hpp"
 
 int main(int argc, char * argv[])
 {
-    TestingClass tclass;
-    tclass.makeNothing();
+    Route tclass;
     std::cout << "sceleton c++ project" << std::endl;
     return 0;
 }
