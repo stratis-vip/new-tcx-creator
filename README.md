@@ -10,11 +10,11 @@ Folders sceleton after clone project:
 project
 │
 └───include
-│   │   testing.hpp
+│   │   routes.hpp
 │   
 └───src
 │   │   main.cpp
-│   │   testing.cpp
+│   │   routes.cpp
 │   
 └───tests
     │   gen.cpp
@@ -25,11 +25,11 @@ Folders sceleton after first ```make``` command:
 project
 │
 └───include
-│   │   testing.hpp
+│   │   routes.hpp
 │   
 └───src
 │   │   main.cpp
-│   │   testing.cpp
+│   │   routes.cpp
 │   
 └───tests
 |   │   gen.cpp

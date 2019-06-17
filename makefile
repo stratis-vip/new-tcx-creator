@@ -35,7 +35,7 @@ all: programs tests
 #  PROGRAMS
 programs: $(BUILD_DIR)/$(PROJECT)
 
-$(BUILD_DIR)/$(PROJECT): src/main.cpp #any other object files like objs/testing.o 
+$(BUILD_DIR)/$(PROJECT): src/main.cpp #any other object files like objs/route.o 
 	$(DIR_GUARD)
 	@echo -n compiling $@
 	@$(CC) $(CFLAGS)  $^ $(INC) -o $@ 
@@ -58,11 +58,18 @@ $(OBJS_DIR)/gmock.o:
     -pthread -c ${GMOCK_DIR}/src/gmock-all.cc -o $@ 
 	@echo " ...finished\n"
 
-$(OBJS_DIR)/testing.o: src/testing.cpp include/testing.hpp 
+$(OBJS_DIR)/route.o: src/route.cpp include/route.hpp  $(OBJS_DIR)/coordinates.o
 	$(DIR_GUARD)
 	@echo -n compiling $@ 
-	@$(CC) $(CFLAGS) -c src/testing.cpp -o $@ $(INC)
+	@$(CC) $(CFLAGS) -c src/route.cpp -o $@ $(INC)
 	@echo " ...finished\n"
+
+$(OBJS_DIR)/coordinates.o: src/coordinates.cpp include/coordinates.hpp 
+	$(DIR_GUARD)
+	@echo -n compiling $@ 
+	@$(CC) $(CFLAGS) -c src/coordinates.cpp -o $@ $(INC)
+	@echo " ...finished\n"
+
 	
 #LIBS
 
@@ -76,7 +83,7 @@ libs:$(OBJS_DIR)/libgmock.a
 
 # TESTS	
 
-$(TESTS_DIR)/gen: objs/gmock.o objs/gtest.o objs/testing.o tests/gen.cpp
+$(TESTS_DIR)/gen: objs/gmock.o objs/gtest.o objs/route.o tests/gen.cpp
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
 	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ ${OBJS_DIR}/libgmock.a -o $@  
