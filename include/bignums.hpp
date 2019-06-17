@@ -15,18 +15,18 @@ public:
     BigNum()
     {
         integerPart = "";
-        fractionalPart = "";
-        isNegative = false;
+        _fractionalPart = "";
+        _isNegative = false;
     };
     BigNum(const string iPart, const string fPart, const bool isNeg = false) : integerPart(iPart),
-                                                                               fractionalPart(fPart), isNegative(isNeg){};
+                                                                               _fractionalPart(fPart), _isNegative(isNeg){};
     BigNum(const int iP, const int fP, const bool isNeg = false):integerPart(std::to_string(iP)),
-                                                                               fractionalPart(std::to_string(fP)), isNegative(isNeg){};
+                                                                               _fractionalPart(std::to_string(fP)), _isNegative(isNeg){};
     BigNum(const BigNum &b)
     {
         integerPart = b.integerPart;
-        fractionalPart = b.fractionalPart;
-        isNegative = b.isNegative;
+        _fractionalPart = b._fractionalPart;
+        _isNegative = b._isNegative;
     }
 
     string value() const;
@@ -37,13 +37,18 @@ public:
     }
 
     BigNum operator+(const BigNum &val);
+    bool isNegative() const {return _isNegative;}
+    string iPart() const {return integerPart;}
+    string fPart() const {return _fractionalPart;}
+    const size_t order() const {return _fractionalPart.size();}
+
 
 private:
     size_t intValue() const { return strToI(integerPart); }
-    size_t fracValue() const { return strToI(fractionalPart); }
+    size_t fracValue() const { return strToI(_fractionalPart); }
     string integerPart;
-    string fractionalPart;
-    bool isNegative{false};
+    string _fractionalPart;
+    bool _isNegative{false};
     char dotCharacter{'.'};
 };
 

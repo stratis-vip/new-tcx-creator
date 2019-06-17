@@ -6,52 +6,64 @@
 #include <vector>
 // #include <iostream>
 
+int getValue(const string part, const bool neg)
+{
+    int aValue = strToI(part);
+    if (neg)
+        aValue *= -1;
+    return aValue;
+}
+
+string addFPart(const BigNum a, const BigNum b)
+{
+    std::ostringstream os{};
+    int aValue, bValue;
+    aValue = getValue(a.fPart(), a.isNegative());
+    bValue = getValue(b.fPart(), b.isNegative());
+    os << aValue + bValue;
+    return os.str();
+}
+
+string addIPart(const BigNum a, const BigNum b)
+{
+    std::ostringstream os{};
+    int aValue, bValue;
+    aValue = getValue(a.iPart(), a.isNegative());
+    bValue = getValue(b.iPart(), b.isNegative());
+    os << aValue + bValue;
+    return os.str();
+}
+
 BigNum BigNum::operator+(const BigNum &vl)
 {
     BigNum retVal;
     BigNum b = vl;
 
     //υπολογίζω την τάξη μεγέθους για το κρατούμενο
-    const size_t taksi = b.fractionalPart.size() >= fractionalPart.size() ? b.fractionalPart.size() : fractionalPart.size();
-    for (auto i = b.fractionalPart.size(); i != taksi; i++)
-        b.fractionalPart.push_back('0');
+    const size_t order = b.order() >= this->order() ? b.order() : this->order();
+    if (order > b.order())
+        for (auto i = b._fractionalPart.size(); i != order; i++)
+            b._fractionalPart.push_back('0');
+    if (order > this->order())
+        for (auto i = _fractionalPart.size(); i != order; i++)
+            _fractionalPart.push_back('0');
 
-    for (auto i = fractionalPart.size(); i != taksi; i++)
-        fractionalPart.push_back('0');
-
-    std::ostringstream os{};
-    int aValue, bValue;
-
-    aValue = strToI(fractionalPart);
-    if (isNegative)
-        aValue *= -1;
-    bValue = strToI(b.fractionalPart);
-    if (b.isNegative)
-        bValue *= -1;
-    os << aValue + bValue;
-    retVal.fractionalPart = os.str();
-
-    os.str("");
-    aValue = strToI(integerPart);
-    if (isNegative)
-        aValue *= -1;
-    bValue = strToI(b.integerPart);
-    if (b.isNegative)
-        bValue *= -1;
-    os << aValue + bValue;
-    retVal.integerPart = os.str();
-
-    //TODO: έλεγχος αν είναι αρνητικό να βρούμε το πρόσημο.
-    //TODO: έλεγχος για το κρατούμενο
+    retVal._fractionalPart = addFPart(*this, vl);
+    retVal.integerPart = addIPart(*this, vl);
+    size_t kratoumeno = tenPow(order);
+    if (strToI(retVal._fractionalPart) > kratoumeno){
+        retVal._fractionalPart = std::to_string(strToI(retVal._fractionalPart) - kratoumeno);
+        retVal.integerPart = std::to_string(strToI(retVal.integerPart) + 1);
+    }
     return retVal;
 };
 
 string BigNum::value() const
 {
     std::ostringstream os{""};
-    if (isNegative)
+    if (_isNegative)
         os << '-';
-    os << integerPart << '.' << fractionalPart;
+    os << integerPart << '.' << _fractionalPart;
     return os.str();
 }
 
