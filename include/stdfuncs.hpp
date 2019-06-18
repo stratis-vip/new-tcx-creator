@@ -15,5 +15,12 @@ bool isNumeric(const string, const char dot = '.');
 string trimLeftZero(const string &a);
 string trimRightZero(const string &a);
 void fillRightZero(string &a, size_t order);
+void fillLeftZero(string &a, size_t order);
+
+string stringAdd(const string &, const string &);
+bool stringBigger(const string &, const string &);
+size_t prepare2Strings(string &a, string &b);
+
+size_t getOrder(const string &, const string &);
 
 #endif

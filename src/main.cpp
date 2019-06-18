@@ -1,10 +1,14 @@
 #include <iostream>
 #include <limits>
 #include "route.hpp"
+#include "bignums.hpp"
 
 int main(int argc, char * argv[])
 {
     Route rt;
+    BigNum a{"123456744323454542","5545439872783646287"};
+    BigNum b{"346743244898234223542","8865472783646287"};
+    std::cout << (a+b).value() << std::endl;
     rt.add(Coordinates(40.544279, 22.233486, 0));
     rt.add(Coordinates(40.544280, 22.234237, 0));
     rt.add(Coordinates(40.543330, 22.234235, 0));

@@ -36,7 +36,7 @@ all: programs tests libs
 #  PROGRAMS
 programs: $(BUILD_DIR)/$(PROJECT)
 
-$(BUILD_DIR)/$(PROJECT): src/main.cpp #any other object files like objs/route.o 
+$(BUILD_DIR)/$(PROJECT): $(OBJS_DIR)/bignums.o $(OBJS_DIR)/stdfuncs.o src/main.cpp  #any other object files like objs/route.o 
 	$(DIR_GUARD)
 	@echo -n compiling $@
 	@$(CC) $(CFLAGS)  $^ $(INC) -o $@ 
