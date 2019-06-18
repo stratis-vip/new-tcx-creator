@@ -130,7 +130,19 @@ TEST(Addition, add1andminus1) {
 TEST(Creation, minusInteger) {
   BigNum a{-1, 1};
   BigNum b{-1, 1};
-  ASSERT_THAT((a + b).value(), Eq("-2.0"));
+  ASSERT_THAT((a + b).value(), Eq("-2.2"));
+}
+
+TEST(Creation, minusInteger1) {
+  BigNum a{-1, 1};
+  BigNum b{0, 1};
+  ASSERT_THAT((a + b).value(), Eq("-1.0"));
+}
+
+TEST(Creation, hundred35_56minus122_789) {
+  BigNum a{35, 56};
+  BigNum b{-122, 789};
+  ASSERT_THAT((a + b).value(), Eq("-87.229"));
 }
 
 TEST(trimLeftZero, delete5zeros) {
@@ -209,21 +221,7 @@ TEST(fillRightZero, make0to00) {
   fillRightZero(a, 2);
   ASSERT_THAT(a, Eq("00"));
 }
-// TEST(TestBnum, CheckBelowZeroValuesThrowExceptions)
-// {
-//   EXPECT_THROW({
-//     Coordinates cor = Coordinates(0, 1, 0);
-//     cor.getAlt();
-//   }, std::invalid_argument);
-//   EXPECT_THROW({
-//     Coordinates cor = Coordinates(-1.0, 1, 0);
-//     cor.getAlt();
-//   }, std::invalid_argument);
-//   EXPECT_THROW({
-//     Coordinates cor = Coordinates(1.0, -11.0, 0);
-//     cor.getAlt();
-//   }, std::invalid_argument);
-// }
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

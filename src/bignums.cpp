@@ -12,9 +12,9 @@ long getValue(const string part, const bool neg) {
 string addFPart(const BigNum a, const BigNum b) {
   std::ostringstream os{};
   int aValue, bValue;
-  aValue = getValue(a.fPart(), true);
-  bValue = getValue(b.fPart(), true);
-  os << aValue + bValue;
+  aValue = getValue(a.fPart(), a.isNegative());
+  bValue = getValue(b.fPart(), b.isNegative());
+  os << abs(aValue + bValue);
   return os.str();
 }
 
