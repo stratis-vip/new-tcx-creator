@@ -31,7 +31,7 @@ TESTS_DIR=$(BUILD_DIR)/tests
 DIR_GUARD=@mkdir -p $(@D)
 PROJECT = main
 
-all: programs tests 
+all: programs tests libs
 
 #  PROGRAMS
 programs: $(BUILD_DIR)/$(PROJECT)
@@ -77,6 +77,13 @@ $(OBJS_DIR)/bignums.o: src/bignums.cpp include/bignums.hpp
 	@$(CC) $(CFLAGS) -c src/bignums.cpp -o $@ $(INC)
 	@echo " ...finished\n"
 
+$(OBJS_DIR)/stdfuncs.o: src/stdfuncs.cpp include/stdfuncs.hpp 
+	$(DIR_GUARD)
+	@echo -n compiling $@ 
+	@$(CC) $(CFLAGS) -c src/stdfuncs.cpp -o $@ $(INC)
+	@echo " ...finished\n"
+
+
 	
 #LIBS
 
@@ -85,21 +92,23 @@ $(OBJS_DIR)/libgmock.a: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o
 	@echo -n creating static Library $@
 	@ar -rc $@ $^
 	@echo " ...finished\n"
+
+
 	
-libs:$(OBJS_DIR)/libgmock.a  ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o ${OBJS_DIR}/bignums.o
+libs:$(OBJS_DIR)/libgmock.a  ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o ${OBJS_DIR}/bignums.o ${OBJS_DIR}/stdfuncs.o 
 
 # TESTS	
 
 $(TESTS_DIR)/gen: $(OBJS_DIR)/gtest.o $(OBJS_DIR)/gmock.o $(OBJS_DIR)/route.o tests/gen.cpp
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
-	@$(CC) $(CFLAGS_NO_WERROR) $(INC) $(TEST_INC) $^ -o $@  -pthread
+	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ -o $@  -pthread
 	@echo " ...finished\n"
 
-$(TESTS_DIR)/gpn: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o  ${OBJS_DIR}/bignums.o  tests/gpn.cpp
+$(TESTS_DIR)/gpn: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o  ${OBJS_DIR}/bignums.o ${OBJS_DIR}/stdfuncs.o tests/gpn.cpp
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
-	@$(CC) $(CFLAGS_NO_WERROR) $(INC) $(TEST_INC) $^ -o $@  -pthread
+	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ -o $@  -pthread
 	@echo " ...finished\n"
 
 tests: $(TESTS_DIR)/gen  $(TESTS_DIR)/gpn

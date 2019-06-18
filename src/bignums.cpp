@@ -1,13 +1,9 @@
 #include "bignums.hpp"
-#include <cctype>
-#include <cmath>
-#include <sstream>
-#include <stdexcept>
-#include <vector>
+
 // #include <iostream>
 
-int getValue(const string part, const bool neg) {
-  int aValue = strToI(part);
+long getValue(const string part, const bool neg) {
+  long aValue = strToI(part);
   if (neg)
     aValue *= -1;
   return aValue;
@@ -53,7 +49,7 @@ BigNum BigNum::operator+(const BigNum &vl) {
     retVal.integerPart = std::to_string(strToI(retVal.integerPart) + 1);
   }
   return retVal;
-};
+}
 
 string BigNum::value() const {
   std::ostringstream os{""};
@@ -63,24 +59,13 @@ string BigNum::value() const {
   return os.str();
 }
 
-bool checkProsimo(string &a) {
-  bool rVal = false;
-  if (a[0] == '-') {
-    a.erase(0, 1);
-    rVal = true;
-  }
-  if (a[0] == '+') {
-    a.erase(0, 1);
-    rVal = false;
-  }
-  return rVal;
-}
-
 BigNum getValueFromString(string a, const char dot) {
   BigNum rVal{};
   string integerPart{"0"};
   string fractionalPart{"0"};
-  bool isNegative = checkProsimo(a);
+  bool isNegative = isNegativeString(a);
+  if (isNegative)
+    a.erase(0, 1);
 
   std::vector<string> parts{};
   size_t dotPos = a.find(dot);
@@ -111,45 +96,4 @@ BigNum getValueFromString(string a, const char dot) {
     fractionalPart = integerPart = "0";
   }
   return BigNum{integerPart, fractionalPart, isNegative};
-}
-
-size_t strToI(const std::string a) {
-  size_t rVal{0};
-  for (size_t i = 0; i != a.size(); i++) {
-    if (isdigit(a[i])) {
-      size_t ord = a[i] - 48;
-      size_t mplyer = (a.size() - (i + 1));
-      if (mplyer == 0)
-        rVal += ord;
-      else
-        rVal += ord * tenPow(mplyer);
-    } else {
-      throw std::invalid_argument("Must be a digit");
-    }
-  }
-  return rVal;
-}
-
-size_t intPow(const size_t base, const size_t toPower) {
-  size_t rVal = pow(base, toPower);
-  return rVal;
-}
-
-size_t tenPow(const size_t toPower) { return intPow(10, toPower); }
-
-bool isNumeric(const string a, const char dot) {
-  string temp(a);
-  if (temp.size() == 0)
-    return false;
-  size_t hasDot{0};
-  checkProsimo(temp);
-  for (auto ch : temp) {
-    if (ch == dot) {
-      hasDot++;
-      if (hasDot > 1)
-        return false;
-    } else if (!isdigit(ch))
-      return false;
-  }
-  return true;
 }
