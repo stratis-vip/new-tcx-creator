@@ -18,11 +18,12 @@ CFLAGS_EXTRA = -m64
 
 CFLAGS_NO_ERROR = $(CFLAGS_STANDARD) $(DEBUG) $(CFLAGS_EXTRA) 
 CFLAGS = $(CFLAGS_NO_ERROR) $(CFLAGS_WARNING1) $(CFLAGS_WARNING2)
+CFLAGS_NO_WERROR = $(CFLAGS_NO_ERROR) $(CFLAGS_WARNING1)
 CFPRODUCTION=$(CFLAGS_STANDARD) $(CFLAGS_EXTRA) -O2
 
 BOOST_LIBS = -lboost_filesystem -lboost_system #any other lib
 INC = -Iinclude
-TEST_INC = -I$(GTEST_DIR) -I$(GMOCK_DIR) -I$(GTEST_DIR)/include  -I$(GMOCK_DIR)/include 
+TEST_INC = -I$(GTEST_DIR)  -I$(GTEST_DIR)/include  -I$(GMOCK_DIR) -I$(GMOCK_DIR)/include 
 
 OBJS_DIR = objs
 BUILD_DIR = build
@@ -85,20 +86,20 @@ $(OBJS_DIR)/libgmock.a: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o
 	@ar -rc $@ $^
 	@echo " ...finished\n"
 	
-libs:$(OBJS_DIR)/libgmock.a ${OBJS_DIR}/bignums.o
+libs:$(OBJS_DIR)/libgmock.a  ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o ${OBJS_DIR}/bignums.o
 
 # TESTS	
 
-$(TESTS_DIR)/gen: objs/gmock.o objs/gtest.o objs/route.o tests/gen.cpp
+$(TESTS_DIR)/gen: $(OBJS_DIR)/gtest.o $(OBJS_DIR)/gmock.o $(OBJS_DIR)/route.o tests/gen.cpp
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
-	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ ${OBJS_DIR}/libgmock.a -o $@  
+	@$(CC) $(CFLAGS_NO_WERROR) $(INC) $(TEST_INC) $^ -o $@  -pthread
 	@echo " ...finished\n"
 
-$(TESTS_DIR)/gpn: ${OBJS_DIR}/libgmock.a ${OBJS_DIR}/gmock.o ${OBJS_DIR}/gtest.o  ${OBJS_DIR}/bignums.o  tests/gpn.cpp
+$(TESTS_DIR)/gpn: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o  ${OBJS_DIR}/bignums.o  tests/gpn.cpp
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
-	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ ${OBJS_DIR}/libgmock.a -o $@  
+	@$(CC) $(CFLAGS_NO_WERROR) $(INC) $(TEST_INC) $^ -o $@  -pthread
 	@echo " ...finished\n"
 
 tests: $(TESTS_DIR)/gen  $(TESTS_DIR)/gpn
