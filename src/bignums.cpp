@@ -12,8 +12,8 @@ long getValue(const string part, const bool neg) {
 string addFPart(const BigNum a, const BigNum b) {
   std::ostringstream os{};
   int aValue, bValue;
-  aValue = getValue(a.fPart(), a.isNegative());
-  bValue = getValue(b.fPart(), b.isNegative());
+  aValue = getValue(a.fPart(), true);
+  bValue = getValue(b.fPart(), true);
   os << aValue + bValue;
   return os.str();
 }
@@ -34,28 +34,28 @@ BigNum BigNum::operator+(const BigNum &vl) {
   //υπολογίζω την τάξη μεγέθους για το κρατούμενο
   const size_t order = b.order() >= this->order() ? b.order() : this->order();
   if (order > b.order())
-    for (auto i = b._fractionalPart.size(); i != order; i++)
-      b._fractionalPart.push_back('0');
+    fillRightZero(b._fractionalPart, order);
   if (order > this->order())
-    for (auto i = _fractionalPart.size(); i != order; i++)
-      _fractionalPart.push_back('0');
+    fillRightZero(this->_fractionalPart, order);
 
   retVal._fractionalPart = addFPart(*this, vl);
-  retVal.integerPart = addIPart(*this, vl);
+  retVal._integerPart = addIPart(*this, vl);
   size_t kratoumeno = tenPow(order);
   if (strToI(retVal._fractionalPart) > kratoumeno) {
     retVal._fractionalPart =
         std::to_string(strToI(retVal._fractionalPart) - kratoumeno);
-    retVal.integerPart = std::to_string(strToI(retVal.integerPart) + 1);
+    retVal._integerPart = std::to_string(strToI(retVal._integerPart) + 1);
   }
   return retVal;
 }
+
+bool BigNum::operator>(const BigNum &val) { return true; }
 
 string BigNum::value() const {
   std::ostringstream os{""};
   if (_isNegative)
     os << '-';
-  os << integerPart << '.' << _fractionalPart;
+  os << _integerPart << '.' << _fractionalPart;
   return os.str();
 }
 

@@ -12,5 +12,8 @@ size_t strToI(const string &);
 size_t intPow(const size_t, const size_t);
 size_t tenPow(const size_t);
 bool isNumeric(const string, const char dot = '.');
+string trimLeftZero(const string &a);
+string trimRightZero(const string &a);
+void fillRightZero(string &a, size_t order);
 
 #endif

@@ -24,14 +24,12 @@ public:
   void setLat(const double value) {
     if (value <= 0)
       throw std::invalid_argument("Latitude must be bigger than 0");
-    if (value != _lat)
-      _lat = value;
+    _lat = value;
   }
   void setLon(const double value) {
     if (value <= 0)
       throw std::invalid_argument("Longtitude must be bigger than 0");
-    if (value != _lon)
-      _lon = value;
+    _lon = value;
   }
   void setAlt(const double alt) {
     if (alt != _alt)

@@ -52,3 +52,51 @@ bool isNegativeString(const string &a) {
   }
   return rVal;
 }
+
+string trimLeftZero(const string &a) {
+  string rVal{};
+  size_t start{0};
+  char prosimo = ' ';
+  if (isNumeric(a)) {
+    if (a[0] == '-' || a[0] == '+') {
+      prosimo = a[0];
+      start = 1;
+    }
+    while (a[start] == '0') {
+      start++;
+    }
+    if (start == a.size())
+      rVal = "0";
+    else
+      rVal = a.substr(start);
+    if (prosimo != ' ')
+      rVal = a[0] + rVal;
+  } else {
+    throw std::invalid_argument("invalid number!");
+  }
+  return rVal;
+}
+
+string trimRightZero(const string &a) {
+  string rVal{};
+  int start = a.size() - 1;
+  if (isNumeric(a)) {
+    while (start >= 0 && a[start] == '0') {
+      start--;
+    }
+    start++;
+    if (start == 0)
+      rVal = "0";
+    else
+      rVal = a.substr(0, start);
+  } else {
+    throw std::invalid_argument("invalid number!");
+  }
+  return rVal;
+}
+
+void fillRightZero(string &a, size_t order) {
+  if (order > a.size())
+    for (auto i = a.size(); i != order; i++)
+      a.push_back('0');
+}

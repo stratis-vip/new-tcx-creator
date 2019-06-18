@@ -123,10 +123,92 @@ TEST(Addition, add123_3164and156_8100945) {
 
 TEST(Addition, add1andminus1) {
   BigNum a{1, 1};
-  BigNum b{1, 1, true};
+  BigNum b{-1, 1};
   ASSERT_THAT((a + b).value(), Eq("0.0"));
 }
 
+TEST(Creation, minusInteger) {
+  BigNum a{-1, 1};
+  BigNum b{-1, 1};
+  ASSERT_THAT((a + b).value(), Eq("-2.0"));
+}
+
+TEST(trimLeftZero, delete5zeros) {
+  ASSERT_THAT(trimLeftZero("00000"), Eq("0"));
+}
+
+TEST(trimLeftZero, delete5zerosNegative) {
+  ASSERT_THAT(trimLeftZero("-00000"), Eq("-0"));
+}
+
+TEST(trimLeftZero, delete5zerosBefore1) {
+  ASSERT_THAT(trimLeftZero("000001"), Eq("1"));
+}
+
+TEST(trimLeftZero, delete5zerosbefore10) {
+  ASSERT_THAT(trimLeftZero("0000010"), Eq("10"));
+}
+
+TEST(trimLeftZero, delete5zerosbefore10Negative) {
+  ASSERT_THAT(trimLeftZero("-0000010"), Eq("-10"));
+}
+
+TEST(trimLeftZero, deleteRandomNumber) {
+  ASSERT_THAT(trimLeftZero("-00452343222234147890564346789710"),
+              Eq("-452343222234147890564346789710"));
+}
+
+TEST(trimLeftZero, ThrowExceptionOnChar) {
+  EXPECT_THROW(trimLeftZero("000000a"), std::invalid_argument);
+}
+
+TEST(trimRightZero, delete5zeros) {
+  ASSERT_THAT(trimRightZero("00000"), Eq("0"));
+}
+
+TEST(trimRightZero, deletezerosBefore1) {
+  ASSERT_THAT(trimRightZero("100000"), Eq("1"));
+}
+
+TEST(trimRightZero, deletezerosBefore10001) {
+  ASSERT_THAT(trimRightZero("1000100"), Eq("10001"));
+}
+
+TEST(fillRightZero, make10to1000) {
+  std::string a{"10"};
+  fillRightZero(a, 4);
+  ASSERT_THAT(a, Eq("1000"));
+}
+
+TEST(fillRightZero, make100to10) {
+  std::string a{"100"};
+  fillRightZero(a, 1);
+  ASSERT_THAT(a, Eq("100"));
+}
+
+TEST(fillRightZero, make100to100) {
+  std::string a{"100"};
+  fillRightZero(a, 2);
+  ASSERT_THAT(a, Eq("100"));
+}
+
+TEST(fillRightZero, make100to1) {
+  std::string a{"100"};
+  fillRightZero(a, 0);
+  ASSERT_THAT(a, Eq("100"));
+}
+
+TEST(fillRightZero, make1to10) {
+  std::string a{"1"};
+  fillRightZero(a, 2);
+  ASSERT_THAT(a, Eq("10"));
+}
+
+TEST(fillRightZero, make0to00) {
+  std::string a{"0"};
+  fillRightZero(a, 2);
+  ASSERT_THAT(a, Eq("00"));
+}
 // TEST(TestBnum, CheckBelowZeroValuesThrowExceptions)
 // {
 //   EXPECT_THROW({
