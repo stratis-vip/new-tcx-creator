@@ -18,9 +18,22 @@ void fillRightZero(string &a, size_t order);
 void fillLeftZero(string &a, size_t order);
 
 string stringAdd(const string &, const string &);
+string stringRemove(const string &, const string &);
 bool stringBigger(const string &, const string &);
+bool stringEqual(const string &, const string &);
+bool stringSmaller(const string &, const string &);
+string makeNegative(string &);
+string makePositive(string &);
+string alterProsimo(string &);
+
 size_t prepare2Strings(string &a, string &b);
 
 size_t getOrder(const string &, const string &);
+
+template <class T> void swap(T &a, T &b) {
+  T temp = b;
+  b = a;
+  a = temp;
+}
 
 #endif
