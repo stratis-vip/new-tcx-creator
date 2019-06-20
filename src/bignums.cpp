@@ -70,7 +70,7 @@ BigNum getValueFromString(string a, const char dot) {
   std::vector<string> parts{};
   size_t dotPos = a.find(dot);
   do {
-    string buffer = a.substr(0, dotPos);
+    const string buffer = a.substr(0, dotPos);
     if (isNumeric(buffer))
       parts.push_back(a.substr(0, dotPos));
     else {

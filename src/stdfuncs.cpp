@@ -24,7 +24,7 @@ size_t intPow(const size_t base, const size_t toPower) {
 
 size_t tenPow(const size_t toPower) { return intPow(10, toPower); }
 
-bool isNumeric(const string a, const char dot) {
+bool isNumeric(const string &a, const char dot) {
   string temp(a);
   if (temp.size() == 0)
     return false;
@@ -77,28 +77,16 @@ string trimLeftZero(const string &a) {
   return rVal;
 }
 
-string trimRightZero(const string &a) {
-  string rVal{};
-  int start = a.size() - 1;
-  if (isNumeric(a)) {
-    while (start >= 0 && a[start] == '0') {
-      start--;
-    }
-    start++;
-    if (start == 0)
-      rVal = "0";
-    else
-      rVal = a.substr(0, start);
-  } else {
-    throw std::invalid_argument("invalid number!");
+string reverse(const string &a) {
+  string rVal;
+  for (auto i = a.end() - 1; i != a.begin() - 1; i--) {
+    rVal.push_back(*i);
   }
   return rVal;
 }
 
-void fillRightZero(string &a, size_t order) {
-  if (order > a.size())
-    for (auto i = a.size(); i != order; i++)
-      a.push_back('0');
+string trimRightZero(const string &a) {
+  return reverse(trimLeftZero(reverse(a)));
 }
 
 void fillLeftZero(string &a, size_t order) {
@@ -107,6 +95,12 @@ void fillLeftZero(string &a, size_t order) {
     for (size_t i = 0; i != topValue; i++)
       a = '0' + a;
   }
+}
+
+void fillRightZero(string &a, size_t order) {
+  a = reverse(a);
+  fillLeftZero(a, order);
+  a = reverse(a);
 }
 
 string stringAdd(const string &a, const string &b) {
@@ -120,7 +114,7 @@ string stringAdd(const string &a, const string &b) {
   if (stringBigger(bTemp, aTemp) && isNegativeString(b)) {
     bTemp = b;
     aTemp = a;
-    rVal1 = stringAdd(alterProsimo(bTemp), alterProsimo(aTemp));
+    rVal1 = stringAdd(alterSign(bTemp), alterSign(aTemp));
     makeNegative(rVal1);
     return rVal1;
   }
@@ -128,7 +122,7 @@ string stringAdd(const string &a, const string &b) {
   if (stringBigger(aTemp, bTemp) && isNegativeString(a)) {
     bTemp = b;
     aTemp = a;
-    rVal1 = stringAdd(alterProsimo(aTemp), alterProsimo(bTemp));
+    rVal1 = stringAdd(alterSign(aTemp), alterSign(bTemp));
     makeNegative(rVal1);
     return rVal1;
   }
@@ -200,7 +194,7 @@ string stringAdd(const string &a, const string &b) {
 string stringRemove(const string &a, const string &b) {
   string aTemp(a);
   string bTemp(b);
-  return stringAdd(aTemp, alterProsimo(bTemp));
+  return stringAdd(aTemp, alterSign(bTemp));
 }
 
 bool stringBigger(const string &a, const string &b) {
@@ -292,7 +286,7 @@ string makeNegative(string &a) {
   if (!isNegativeString(aTemp))
     a = '-' + a;
   return a;
-  string alterProsimo(string &);
+  string alterSign(string &);
 }
 
 string makePositive(string &a) {
@@ -305,7 +299,7 @@ string makePositive(string &a) {
   }
 }
 
-string alterProsimo(string &a) {
+string alterSign(string &a) {
   string aTemp(trimLeftZero(a));
   if (isNegativeString(aTemp))
     makePositive(aTemp);

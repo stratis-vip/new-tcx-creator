@@ -263,6 +263,10 @@ TEST(trimRightZero, deletezerosBefore10001) {
   ASSERT_THAT(trimRightZero("1000100"), Eq("10001"));
 }
 
+TEST(trimRightZero, deletezerosBefore1000) {
+  ASSERT_THAT(trimRightZero("103000"), Eq("103"));
+}
+
 TEST(fillRightZero, make10to1000) {
   std::string a{"10"};
   fillRightZero(a, 4);
@@ -319,6 +323,10 @@ TEST(stringRemove, 1678943minus789054) {
 TEST(stringRemove, minus1678943minus789054) {
   ASSERT_THAT(stringRemove("-1678943", "-789054"), Eq("-889889"));
 };
+
+TEST(reverse, Reverseabcd) { ASSERT_THAT(reverse("abcd"), Eq("dcba")); }
+
+TEST(reverse, ReverseEmptySTring) { ASSERT_THAT(reverse("    "), Eq("    ")); }
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
