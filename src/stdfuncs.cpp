@@ -1,68 +1,85 @@
 #include "stdfuncs.hpp"
 
-size_t strToI(const std::string &a) {
+size_t strToI(const std::string &a)
+{
   size_t rVal{0};
-  for (size_t i = 0; i != a.size(); i++) {
-    if (isdigit(a[i])) {
+  for (size_t i = 0; i != a.size(); i++)
+  {
+    if (isdigit(a[i]))
+    {
       size_t ord = static_cast<size_t>(a[i]) - 48UL;
       size_t mplyer = (a.size() - (i + 1));
       if (mplyer == 0)
         rVal += ord;
       else
         rVal += ord * tenPow(mplyer);
-    } else {
+    }
+    else
+    {
       throw std::invalid_argument("Must be a digit");
     }
   }
   return rVal;
 }
 
-size_t intPow(const size_t base, const size_t toPower) {
+size_t intPow(const size_t base, const size_t toPower)
+{
   size_t rVal = static_cast<int>(pow(base, toPower));
   return rVal;
 }
 
 size_t tenPow(const size_t toPower) { return intPow(10, toPower); }
 
-bool isNumeric(const string &a, const char dot) {
+bool isNumeric(const string &a, const char dot)
+{
   string temp(a);
   if (temp.size() == 0)
     return false;
   size_t hasDot{0};
   if (isNegativeString(temp))
     temp.erase(0, 1);
-  for (auto ch : temp) {
-    if (ch == dot) {
+  for (auto ch : temp)
+  {
+    if (ch == dot)
+    {
       hasDot++;
       if (hasDot > 1)
         return false;
-    } else if (!isdigit(ch))
+    }
+    else if (!isdigit(ch))
       return false;
   }
   return true;
 }
 
-bool isNegativeString(const string &a) {
+bool isNegativeString(const string &a)
+{
   bool rVal = false;
-  if (a[0] == '-') {
+  if (a[0] == '-')
+  {
     rVal = true;
   }
-  if (a[0] == '+') {
+  if (a[0] == '+')
+  {
     rVal = false;
   }
   return rVal;
 }
 
-string trimLeftZero(const string &a) {
+string trimLeftZero(const string &a)
+{
   string rVal{};
   size_t start{0};
   char prosimo = ' ';
-  if (isNumeric(a)) {
-    if (a[0] == '-' || a[0] == '+') {
+  if (isNumeric(a))
+  {
+    if (a[0] == '-' || a[0] == '+')
+    {
       prosimo = a[0];
       start = 1;
     }
-    while (a[start] == '0') {
+    while (a[start] == '0')
+    {
       start++;
     }
     if (start == a.size())
@@ -71,39 +88,48 @@ string trimLeftZero(const string &a) {
       rVal = a.substr(start);
     if (prosimo != ' ')
       rVal = a[0] + rVal;
-  } else {
+  }
+  else
+  {
     throw std::invalid_argument("invalid number!");
   }
   return rVal;
 }
 
-string reverse(const string &a) {
+string reverse(const string &a)
+{
   string rVal;
-  for (auto i = a.end() - 1; i != a.begin() - 1; i--) {
+  for (auto i = a.end() - 1; i != a.begin() - 1; i--)
+  {
     rVal.push_back(*i);
   }
   return rVal;
 }
 
-string trimRightZero(const string &a) {
+string trimRightZero(const string &a)
+{
   return reverse(trimLeftZero(reverse(a)));
 }
 
-void fillLeftZero(string &a, size_t order) {
-  if (order > a.size()) {
+void fillLeftZero(string &a, size_t order)
+{
+  if (order > a.size())
+  {
     size_t topValue = order - a.size();
     for (size_t i = 0; i != topValue; i++)
       a = '0' + a;
   }
 }
 
-void fillRightZero(string &a, size_t order) {
+void fillRightZero(string &a, size_t order)
+{
   a = reverse(a);
   fillLeftZero(a, order);
   a = reverse(a);
 }
 
-string stringAdd(const string &a, const string &b) {
+string stringAdd(const string &a, const string &b)
+{
   bool negativeValue = false;
   string aTemp(a);
   string bTemp(b);
@@ -111,7 +137,8 @@ string stringAdd(const string &a, const string &b) {
   makePositive(bTemp);
   string rVal1{};
 
-  if (stringBigger(bTemp, aTemp) && isNegativeString(b)) {
+  if (stringBigger(bTemp, aTemp) && isNegativeString(b))
+  {
     bTemp = b;
     aTemp = a;
     rVal1 = stringAdd(alterSign(bTemp), alterSign(aTemp));
@@ -119,7 +146,8 @@ string stringAdd(const string &a, const string &b) {
     return rVal1;
   }
 
-  if (stringBigger(aTemp, bTemp) && isNegativeString(a)) {
+  if (stringBigger(aTemp, bTemp) && isNegativeString(a))
+  {
     bTemp = b;
     aTemp = a;
     rVal1 = stringAdd(alterSign(aTemp), alterSign(bTemp));
@@ -138,7 +166,8 @@ string stringAdd(const string &a, const string &b) {
   if (bNeg)
     bTemp.erase(0, 1);
 
-  if (aNeg && bNeg) {
+  if (aNeg && bNeg)
+  {
     negativeValue = true;
     aNeg = bNeg = false;
   }
@@ -149,7 +178,8 @@ string stringAdd(const string &a, const string &b) {
   unsigned char ipolipoumeno{0};
   string rVal(order + 1, '0');
 
-  while (order > 0) {
+  while (order > 0)
+  {
     size_t i = order - 1;
     signed char aC = aTemp[i] - 48;
     signed char bC = bTemp[i] - 48;
@@ -161,20 +191,29 @@ string stringAdd(const string &a, const string &b) {
     // signed char sum = aC + bC;
     signed char sum = aC + bC - ipolipoumeno;
 
-    if (sum > 9) {
+    if (sum > 9)
+    {
       sum -= 10;
       rVal[i + 1] = (sum + kratoumeno) + 48;
       kratoumeno = 1;
-    } else {
-      if (sum == 9 && kratoumeno == 1) {
+    }
+    else
+    {
+      if (sum == 9 && kratoumeno == 1)
+      {
         rVal[i + 1] = '0';
         kratoumeno = 1;
-      } else {
-        if (sum < 0) {
+      }
+      else
+      {
+        if (sum < 0)
+        {
           sum = aC + bC + 10 - ipolipoumeno;
           ipolipoumeno = 1;
           // sum = aC + bC + 10;
-        } else {
+        }
+        else
+        {
           ipolipoumeno = 0;
         }
         rVal[i + 1] = (sum + kratoumeno) + 48;
@@ -183,7 +222,8 @@ string stringAdd(const string &a, const string &b) {
     }
     order--;
   }
-  if (kratoumeno > 0) {
+  if (kratoumeno > 0)
+  {
     rVal[0] = kratoumeno + 48;
   }
   if (negativeValue)
@@ -191,97 +231,120 @@ string stringAdd(const string &a, const string &b) {
   return trimLeftZero(rVal);
 }
 
-string stringRemove(const string &a, const string &b) {
+string stringRemove(const string &a, const string &b)
+{
   string aTemp(a);
   string bTemp(b);
   return stringAdd(aTemp, alterSign(bTemp));
 }
 
-bool stringBigger(const string &a, const string &b) {
+bool stringBigger(const string &a, const string &b)
+{
   string aTemp(trimLeftZero(a));
   string bTemp(trimLeftZero(b));
   size_t order = prepare2Strings(aTemp, bTemp);
 
   bool aNeg = isNegativeString(a);
   bool bNeg = isNegativeString(b);
-  if (aNeg) {
+  if (aNeg)
+  {
     // a is negative
-    if (bNeg) {
+    if (bNeg)
+    {
       // b is negative
       makePositive(aTemp);
       makePositive(bTemp);
       swap(aTemp, bTemp);
-    } else {
+    }
+    else
+    {
       // b is positive
       return false;
     }
-
-  } else {
+  }
+  else
+  {
     // a is positive
-    if (bNeg) {
+    if (bNeg)
+    {
       // b is negative
       return true;
     }
   }
-  for (size_t i = 0; i != order; i++) {
-    if (aTemp[i] != bTemp[i]) {
+  for (size_t i = 0; i != order; i++)
+  {
+    if (aTemp[i] != bTemp[i])
+    {
       return aTemp[i] < bTemp[i] ? false : true;
     }
   }
   return true;
 }
 
-bool stringEqual(const string &a, const string &b) {
+bool stringEqual(const string &a, const string &b)
+{
   string aTemp(trimLeftZero(a));
   string bTemp(trimLeftZero(b));
   size_t order = prepare2Strings(aTemp, bTemp);
 
   bool aNeg = isNegativeString(a);
   bool bNeg = isNegativeString(b);
-  if (aNeg) {
+  if (aNeg)
+  {
     // a is negative
-    if (bNeg) {
+    if (bNeg)
+    {
       // b is negative
       makePositive(aTemp);
-    } else {
+    }
+    else
+    {
       // b is positive
       return false;
     }
-
-  } else {
+  }
+  else
+  {
     // a is positive
-    if (bNeg) {
+    if (bNeg)
+    {
       // b is negative
       return true;
     }
   }
 
-  for (size_t i = 0; i != order; i++) {
-    if (aTemp[i] != bTemp[i]) {
+  for (size_t i = 0; i != order; i++)
+  {
+    if (aTemp[i] != bTemp[i])
+    {
       return false;
     }
   }
   return true;
 }
 
-bool stringSmaller(const string &a, const string &b) {
+bool stringSmaller(const string &a, const string &b)
+{
   return stringBigger(b, a);
 }
 
-size_t getOrder(const string &a, const string &b) {
+size_t getOrder(const string &a, const string &b)
+{
   size_t aOrder = a.size();
   size_t bOrder = b.size();
   return aOrder >= bOrder ? aOrder : bOrder;
 }
 
-size_t prepare2Strings(string &a, string &b) {
+size_t prepare2Strings(string &a, string &b)
+{
   size_t order = getOrder(a, b);
   fillLeftZero(a, order);
   fillLeftZero(b, order);
   return order;
 }
 
-string makeNegative(string &a) {
+string makeNegative(string &a)
+{
   string aTemp(trimLeftZero(a));
   if (!isNegativeString(aTemp))
     a = '-' + a;
@@ -289,17 +352,20 @@ string makeNegative(string &a) {
   string alterSign(string &);
 }
 
-string makePositive(string &a) {
+string makePositive(string &a)
+{
   string aTemp(trimLeftZero(a));
   if (!isNegativeString(aTemp))
     return a;
-  else {
+  else
+  {
     a.erase(0, 1);
     return a;
   }
 }
 
-string alterSign(string &a) {
+string alterSign(string &a)
+{
   string aTemp(trimLeftZero(a));
   if (isNegativeString(aTemp))
     makePositive(aTemp);
