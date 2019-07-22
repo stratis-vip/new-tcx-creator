@@ -1,10 +1,21 @@
 ifeq ($(OS),Windows_NT)     # is Windows_NT on XP, 2000, 7, Vista, 10...
     GTEST_DIR = c:/MinGW/include/gtest
 	GMOCK_DIR = c:/MinGW/include/gmock
+	OS=WIN
 else
     GTEST_DIR = /usr/local/gtest
 	GMOCK_DIR = /usr/local/gmock
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S),Linux)
+		OS = LIN
+		MYTEST_DIR = /home/stratis/dev/c++/myTestSuit/include
+	endif
+	ifeq ($(UNAME_S),Darwin)
+		OS = OS
+		
+	endif
 endif
+
 
 #curl support
 #LDFLAGS=-L/usr/local/opt/curl/lib
@@ -25,9 +36,9 @@ BOOST_LIBS = -lboost_filesystem -lboost_system #any other lib
 INC = -Iinclude
 TEST_INC = -I$(GTEST_DIR)  -I$(GTEST_DIR)/include  -I$(GMOCK_DIR) -I$(GMOCK_DIR)/include 
 
-OBJS_DIR = objs
-BUILD_DIR = build
-TESTS_DIR=$(BUILD_DIR)/tests
+OBJS_DIR = objs/${OS}
+BUILD_DIR = build/${OS}
+TESTS_DIR=$(BUILD_DIR)/${OS}/tests
 DIR_GUARD=@mkdir -p $(@D)
 PROJECT = main
 
@@ -114,7 +125,7 @@ libs:${OBJS_DIR}/bignums.o ${OBJS_DIR}/stdfuncs.o  #$(OBJS_DIR)/libgmock.a  ${OB
 $(TESTS_DIR)/alfa: ${OBJS_DIR}/bignums.o ${OBJS_DIR}/stdfuncs.o tests/alfa.cpp
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
-	@$(CC) $(CFLAGS) $(INC) -I/Users/stratis/Desktop/dev/c++/Mytest/include $^ -o $@ 
+	@$(CC) $(CFLAGS) $(INC) -I${MYTEST_DIR} $^ -o $@ 
 	@echo " ...finished\n"
 
 tests: ${TESTS_DIR}/alfa # $(TESTS_DIR)/gen  $(TESTS_DIR)/gpn 
