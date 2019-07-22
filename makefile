@@ -38,7 +38,7 @@ TEST_INC = -I$(GTEST_DIR)  -I$(GTEST_DIR)/include  -I$(GMOCK_DIR) -I$(GMOCK_DIR)
 
 OBJS_DIR = objs/${OS}
 BUILD_DIR = build/${OS}
-TESTS_DIR=$(BUILD_DIR)/${OS}/tests
+TESTS_DIR=$(BUILD_DIR)/tests
 DIR_GUARD=@mkdir -p $(@D)
 PROJECT = main
 
