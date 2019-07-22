@@ -44,20 +44,20 @@ $(BUILD_DIR)/$(PROJECT): $(OBJS_DIR)/bignums.o $(OBJS_DIR)/stdfuncs.o src/main.c
 
 # OBJECTS
 
-$(OBJS_DIR)/gtest.o: 
-	$(DIR_GUARD)
-	@echo -n compiling Google Test Library $@
-	@$(CC) $(CFLAGS) -isystem $(GTEST_DIR)/include -I$(GTEST_DIR)  -isystem $(GMOCK_DIR) \
-	-pthread -c $(GTEST_DIR)/src/gtest-all.cc -o $@  
-	@echo " ...finished\n"
+# $(OBJS_DIR)/gtest.o: 
+# 	$(DIR_GUARD)
+# 	@echo -n compiling Google Test Library $@
+# 	@$(CC) $(CFLAGS) -isystem $(GTEST_DIR)/include -I$(GTEST_DIR)  -isystem $(GMOCK_DIR) \
+# 	-pthread -c $(GTEST_DIR)/src/gtest-all.cc -o $@  
+# 	@echo " ...finished\n"
 
-$(OBJS_DIR)/gmock.o: 
-	$(DIR_GUARD)
-	@echo -n compiling Google Mocking Library $@
-	@$(CC) $(CFLAGS) -isystem ${GTEST_DIR}/include -I${GTEST_DIR} \
-    -isystem ${GMOCK_DIR}/include -I${GMOCK_DIR} \
-    -pthread -c ${GMOCK_DIR}/src/gmock-all.cc -o $@ 
-	@echo " ...finished\n"
+# $(OBJS_DIR)/gmock.o: 
+# 	$(DIR_GUARD)
+# 	@echo -n compiling Google Mocking Library $@
+# 	@$(CC) $(CFLAGS) -isystem ${GTEST_DIR}/include -I${GTEST_DIR} \
+#     -isystem ${GMOCK_DIR}/include -I${GMOCK_DIR} \
+#     -pthread -c ${GMOCK_DIR}/src/gmock-all.cc -o $@ 
+# 	@echo " ...finished\n"
 
 $(OBJS_DIR)/route.o: src/route.cpp include/route.hpp  $(OBJS_DIR)/coordinates.o
 	$(DIR_GUARD)
@@ -88,30 +88,36 @@ $(OBJS_DIR)/stdfuncs.o: src/stdfuncs.cpp include/stdfuncs.hpp
 #LIBS
 
 
-$(OBJS_DIR)/libgmock.a: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o
-	@echo -n creating static Library $@
-	@ar -rc $@ $^
-	@echo " ...finished\n"
+# $(OBJS_DIR)/libgmock.a: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o
+# 	@echo -n creating static Library $@
+# 	@ar -rc $@ $^
+# 	@echo " ...finished\n"
 
 
 	
-libs:$(OBJS_DIR)/libgmock.a  ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o ${OBJS_DIR}/bignums.o ${OBJS_DIR}/stdfuncs.o 
+libs:${OBJS_DIR}/bignums.o ${OBJS_DIR}/stdfuncs.o  #$(OBJS_DIR)/libgmock.a  ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o 
 
 # TESTS	
 
-$(TESTS_DIR)/gen: $(OBJS_DIR)/gtest.o $(OBJS_DIR)/gmock.o $(OBJS_DIR)/route.o tests/gen.cpp
+# $(TESTS_DIR)/gen: $(OBJS_DIR)/gtest.o $(OBJS_DIR)/gmock.o $(OBJS_DIR)/route.o tests/gen.cpp
+# 	$(DIR_GUARD)
+# 	@echo -n compiling test $@ 
+# 	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ -o $@  -pthread
+# 	@echo " ...finished\n"
+
+# $(TESTS_DIR)/gpn: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o  ${OBJS_DIR}/bignums.o ${OBJS_DIR}/stdfuncs.o tests/gpn.cpp
+# 	$(DIR_GUARD)
+# 	@echo -n compiling test $@ 
+# 	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ -o $@  -pthread
+# 	@echo " ...finished\n"
+
+$(TESTS_DIR)/alfa: ${OBJS_DIR}/bignums.o ${OBJS_DIR}/stdfuncs.o tests/alfa.cpp
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
-	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ -o $@  -pthread
+	@$(CC) $(CFLAGS) $(INC) -I/Users/stratis/Desktop/dev/c++/Mytest/include $^ -o $@ 
 	@echo " ...finished\n"
 
-$(TESTS_DIR)/gpn: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o  ${OBJS_DIR}/bignums.o ${OBJS_DIR}/stdfuncs.o tests/gpn.cpp
-	$(DIR_GUARD)
-	@echo -n compiling test $@ 
-	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^ -o $@  -pthread
-	@echo " ...finished\n"
-
-tests: $(TESTS_DIR)/gen  $(TESTS_DIR)/gpn
+tests: ${TESTS_DIR}/alfa # $(TESTS_DIR)/gen  $(TESTS_DIR)/gpn 
 
 clean:
 	@rm -rf objs build
