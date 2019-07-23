@@ -12,7 +12,7 @@ else
 	endif
 	ifeq ($(UNAME_S),Darwin)
 		OS = OS
-		
+		MYTEST_DIR = /Users/stratis/Desktop/dev/c++/Mytest/include
 	endif
 endif
 
