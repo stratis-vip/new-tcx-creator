@@ -30,7 +30,7 @@ public:
       : _integerPart(b._integerPart), _fractionalPart(b._fractionalPart),
         _isNegative(b._isNegative) {}
 
-  string value() const;
+  const string value() const;
 
   void setDotCharacter(const char dot) { dotCharacter = dot; }
 

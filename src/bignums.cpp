@@ -51,8 +51,10 @@ BigNum BigNum::operator+(const BigNum &vl) {
 
 bool BigNum::operator>(const BigNum &val) { return true; }
 
-string BigNum::value() const {
+const string BigNum::value() const {
   std::ostringstream os{""};
+  if (_integerPart == "" & _fractionalPart == "")
+    return os.str();
   if (_isNegative)
     os << '-';
   os << _integerPart << '.' << _fractionalPart;
